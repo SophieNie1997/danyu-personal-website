@@ -9,7 +9,7 @@ const setExpanded = (button, expanded) => {
 };
 
 const openRouteStep = (stepId) => {
-  const targetStep = document.querySelector(`[data-step-id="${stepId}"]`);
+  const targetStep = document.querySelector(`[data-step-id="${stepId}"]`) ?? document.querySelector("[data-route-step]");
   if (!targetStep) return;
 
   document.querySelectorAll("[data-route-step]").forEach((step) => {
@@ -25,7 +25,7 @@ const startJourney = (targetStepId) => {
   if (startButton) setExpanded(startButton, true);
   if (targetStepId) openRouteStep(targetStepId);
 
-  const delay = reducedMotion.matches ? 0 : 620;
+  const delay = reducedMotion.matches ? 0 : 120;
   window.setTimeout(() => {
     routeSection?.scrollIntoView({
       block: "start",
@@ -45,7 +45,10 @@ const resetJourney = () => {
 startButton?.addEventListener("click", () => startJourney("ai-product"));
 
 routeCards.forEach((card) => {
-  card.addEventListener("click", () => startJourney(card.dataset.mapCard));
+  card.addEventListener("click", () => {
+    const targetStepId = card.classList.contains("is-route") ? card.dataset.mapCard : "ai-product";
+    startJourney(targetStepId);
+  });
 });
 
 routeButtons.forEach((button) => {

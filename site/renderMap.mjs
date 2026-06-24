@@ -9,6 +9,9 @@ const escapeHtml = (value) =>
 const routeIndexById = (steps) =>
   new Map(steps.map((step, index) => [step.id, index]));
 
+const cardMetaById = (cards) =>
+  new Map(cards.map((card) => [card.id, card]));
+
 const renderCard = (card, routeIndexes) => {
   const routeIndex = routeIndexes.has(card.id) ? routeIndexes.get(card.id) : -1;
   const routeClass = card.route ? "is-route" : "is-side";
@@ -48,8 +51,11 @@ const renderStepMedia = (step) => {
   `;
 };
 
-const renderRouteStep = (step, index) => `
-  <article class="route-step ${index === 0 ? "is-open" : ""}" data-route-step data-step-id="${escapeHtml(step.id)}">
+const renderRouteStep = (step, index, cardMeta) => {
+  const tone = cardMeta?.tone ?? "soft";
+
+  return `
+  <article class="route-step tone-${escapeHtml(tone)} ${index === 0 ? "is-open" : ""}" data-route-step data-route-card="${escapeHtml(step.id)}" data-step-id="${escapeHtml(step.id)}">
     <button class="route-step-button" type="button" data-route-toggle aria-expanded="${index === 0 ? "true" : "false"}">
       <span>${String(index + 1).padStart(2, "0")}</span>
       <strong>${escapeHtml(step.title)}</strong>
@@ -61,9 +67,11 @@ const renderRouteStep = (step, index) => `
     </div>
   </article>
 `;
+};
 
 export const renderMapPage = (content) => {
   const routeIndexes = routeIndexById(content.routeSteps);
+  const cardMeta = cardMetaById(content.cards);
 
   return `<!doctype html>
 <html lang="${escapeHtml(content.meta.locale ?? "zh-CN")}">
@@ -96,8 +104,8 @@ export const renderMapPage = (content) => {
           <h2 id="guided-route-title">一条从能力到人的路径</h2>
           <p>先看职业能力，再看这些能力如何连接到作品、方法和生活经验。</p>
         </div>
-        <div class="route-steps">
-          ${content.routeSteps.map(renderRouteStep).join("")}
+        <div class="route-steps" data-route-board>
+          ${content.routeSteps.map((step, index) => renderRouteStep(step, index, cardMeta.get(step.id))).join("")}
         </div>
       </section>
     </main>

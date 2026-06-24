@@ -133,3 +133,20 @@ test("map entrance organizes cards into intentional layers", async () => {
   assert.ok(mapContent.cards.every((card) => card.x >= 12 && card.x <= 88));
   assert.ok(mapContent.cards.every((card) => card.y >= 12 && card.y <= 88));
 });
+
+test("map route renders as a normal clickable color-board after entry", async () => {
+  const { mapContent } = await import("../site/mapContent.mjs");
+  const { renderMapPage } = await import("../site/renderMap.mjs");
+  const html = renderMapPage(mapContent);
+  const css = await readFile(new URL("../site/mapStyles.css", import.meta.url), "utf8");
+
+  assert.match(html, /data-route-board/);
+  assert.match(html, /class="route-step tone-primary/);
+  assert.match(html, /class="route-step tone-blue/);
+  assert.match(html, /class="route-step tone-sage/);
+  assert.match(html, /class="route-step tone-rose/);
+  assert.match(html, /data-route-card="projects-reel"/);
+  assert.match(css, /\.route-steps\s*{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/s);
+  assert.doesNotMatch(css, /map-started \.map-entry-panel[^}]*opacity: 0\.18/s);
+  assert.doesNotMatch(css, /map-started \.map-card\.is-route[^}]*opacity: 0\.46/s);
+});
