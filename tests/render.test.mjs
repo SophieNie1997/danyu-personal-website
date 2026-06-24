@@ -1,0 +1,66 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { siteContent } from "../site/content.mjs";
+import { renderPage } from "../site/render.mjs";
+
+test("rendered page includes the approved homepage structure", () => {
+  const html = renderPage(siteContent);
+
+  assert.match(html, /<html lang="zh-CN">/i);
+  assert.match(html, /<nav/i);
+  assert.match(html, /AI 工具，有用也有温度/);
+  assert.match(html, /课程点评自动生成工作流/);
+  assert.match(html, /把复杂讲清楚/);
+  assert.match(html, /成为母亲/);
+  assert.match(html, /href="#work">看作品/i);
+  assert.match(html, /id="archive"/i);
+  assert.match(html, /id="contact"/i);
+});
+
+test("rendered page uses Chinese navigation and section labels", () => {
+  const html = renderPage(siteContent);
+
+  assert.match(html, />作品</);
+  assert.match(html, />思考方式</);
+  assert.match(html, />故事</);
+  assert.match(html, />生活档案</);
+  assert.match(html, />联系</);
+  assert.match(html, /作品作为证据/);
+  assert.match(html, /生活也是作品集/);
+});
+
+test("rendered page references stylesheet, script, and proof artifacts", () => {
+  const html = renderPage(siteContent);
+
+  assert.match(html, /styles\.css/);
+  assert.match(html, /interactions\.js/);
+  assert.match(html, /portfolio-page-1\.png/);
+  assert.match(html, /resume-page-1\.png/);
+});
+
+test("rendered page includes the AI projects reel as lightweight dynamic evidence", () => {
+  const html = renderPage(siteContent);
+
+  assert.match(html, /id="projects-reel"/);
+  assert.match(html, /AI Projects Reel/);
+  assert.match(html, /<video[^>]+poster="\.\/artifacts\/ai-projects-poster\.png"/);
+  assert.match(html, /preload="metadata"/);
+  assert.match(html, /src="\.\/artifacts\/ai-projects-reel-preview\.m4v"/);
+  assert.match(html, /href="\.\/artifacts\/ai-projects-reel-preview\.m4v"/);
+  assert.doesNotMatch(html, /ai-projects-full\.m4v/);
+  assert.match(html, /这些不是概念 demo/);
+});
+
+test("local preview server serves m4v files with a video mime type", async () => {
+  const serverSource = await readFile(new URL("../scripts/serve.mjs", import.meta.url), "utf8");
+
+  assert.match(serverSource, /"\.m4v": "video\/mp4"/);
+});
+
+test("build does not require oversized private video assets", async () => {
+  const buildSource = await readFile(new URL("../scripts/build.mjs", import.meta.url), "utf8");
+
+  assert.doesNotMatch(buildSource, /ai-projects-full\.m4v/);
+  assert.match(buildSource, /ai-projects-reel-preview\.m4v/);
+});

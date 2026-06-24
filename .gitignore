@@ -1,0 +1,28 @@
+.DS_Store
+Icon?
+
+# Local brainstorming / Codex scratch files
+.superpowers/
+
+# Build output
+dist/
+
+# Raw and oversized video files
+AI projects.mov
+public/artifacts/ai-projects-full.m4v
+
+# Private source notes and job materials
+personal_website_background.md
+docs/superpowers/
+tools/
+输出/
+过往简历/
+目标公司/
+
+# Python and system caches
+__pycache__/
+*.pyc
+
+# Node caches
+node_modules/
+npm-debug.log*
