@@ -117,3 +117,19 @@ test("map interaction supports collection transition and reduced motion", async 
   assert.match(css, /transform/);
   assert.match(css, /opacity/);
 });
+
+test("map entrance organizes cards into intentional layers", async () => {
+  const { mapContent } = await import("../site/mapContent.mjs");
+  const layers = Array.from(new Set(mapContent.cards.map((card) => card.layer))).sort();
+  const stacks = Array.from(new Set(mapContent.cards.map((card) => card.stack).filter(Boolean))).sort();
+  const routeCards = mapContent.cards.filter((card) => card.route);
+
+  assert.deepEqual(layers, ["archive", "evidence", "primary"]);
+  assert.ok(mapContent.cards.length >= 24);
+  assert.ok(stacks.length >= 4);
+  assert.ok(mapContent.cards.filter((card) => card.stack).length >= 16);
+  assert.ok(routeCards.every((card) => Number.isInteger(card.order)));
+  assert.equal(routeCards[0].id, "ai-product");
+  assert.ok(mapContent.cards.every((card) => card.x >= 12 && card.x <= 88));
+  assert.ok(mapContent.cards.every((card) => card.y >= 12 && card.y <= 88));
+});

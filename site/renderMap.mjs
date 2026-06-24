@@ -18,7 +18,9 @@ const renderCard = (card, routeIndexes) => {
       class="map-card tone-${escapeHtml(card.tone)} ${routeClass}"
       type="button"
       data-map-card="${escapeHtml(card.id)}"
-      style="--x: ${Number(card.x)}%; --y: ${Number(card.y)}%; --rotation: ${Number(card.rotation)}deg; --route-index: ${routeIndex};"
+      data-layer="${escapeHtml(card.layer ?? "evidence")}"
+      data-stack="${escapeHtml(card.stack ?? "loose")}"
+      style="--x: ${Number(card.x)}%; --y: ${Number(card.y)}%; --rotation: ${Number(card.rotation)}deg; --route-index: ${routeIndex}; --stack-index: ${Number(card.depth ?? 0)};"
       aria-label="${escapeHtml(card.label)}，${escapeHtml(card.category)}"
     >
       <span>${escapeHtml(card.category)}</span>

@@ -101,11 +101,26 @@ button {
   z-index: 1;
 }
 
+.map-card-layer::before,
+.map-card-layer::after {
+  content: "";
+  position: absolute;
+  inset: 12% 15%;
+  border: 1px solid rgba(38, 49, 65, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.map-card-layer::after {
+  inset: 20% 24%;
+  transform: rotate(-7deg);
+}
+
 .map-entry-panel {
   position: relative;
-  z-index: 3;
-  width: min(470px, calc(100% - 36px));
-  padding: clamp(28px, 5vw, 48px);
+  z-index: 20;
+  width: min(430px, calc(100% - 36px));
+  padding: clamp(26px, 4.4vw, 42px);
   border: 1px solid rgba(38, 49, 65, 0.16);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.74);
@@ -135,7 +150,7 @@ button {
 
 .map-entry-panel h1 {
   margin: 0 0 14px;
-  font-size: clamp(40px, 6vw, 68px);
+  font-size: clamp(38px, 5vw, 58px);
   line-height: 1.02;
   letter-spacing: 0;
 }
@@ -185,14 +200,14 @@ button {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  z-index: 2;
-  width: clamp(128px, 13vw, 196px);
-  min-height: clamp(76px, 8vw, 104px);
+  z-index: calc(2 + var(--stack-index));
+  width: clamp(112px, 10.8vw, 164px);
+  min-height: clamp(66px, 6.5vw, 92px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 14px;
-  padding: 14px;
+  gap: 10px;
+  padding: 12px;
   border: 1px solid rgba(38, 49, 65, 0.15);
   border-radius: var(--radius);
   color: var(--ink);
@@ -200,7 +215,8 @@ button {
   cursor: pointer;
   box-shadow: 0 12px 34px rgba(38, 49, 65, 0.1);
   transform: translate(-50%, -50%) rotate(var(--rotation));
-  opacity: 0.96;
+  opacity: 0.88;
+  isolation: isolate;
   transition:
     left 720ms cubic-bezier(0.16, 1, 0.3, 1),
     top 720ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -209,6 +225,25 @@ button {
     opacity 420ms ease,
     box-shadow 180ms ease;
   will-change: transform, opacity;
+}
+
+.map-card[data-stack]::before,
+.map-card[data-stack]::after {
+  content: "";
+  position: absolute;
+  inset: 5px -5px -5px 5px;
+  z-index: -1;
+  border: 1px solid rgba(38, 49, 65, 0.1);
+  border-radius: inherit;
+  background: inherit;
+  opacity: 0.42;
+  transform: rotate(-2.5deg);
+}
+
+.map-card[data-stack]::after {
+  inset: 10px -10px -10px 10px;
+  opacity: 0.2;
+  transform: rotate(2deg);
 }
 
 .map-card:hover {
@@ -223,9 +258,30 @@ button {
 }
 
 .map-card strong {
-  font-size: clamp(18px, 1.8vw, 25px);
+  font-size: clamp(16px, 1.35vw, 22px);
   line-height: 1.12;
   letter-spacing: 0;
+}
+
+.map-card[data-layer="primary"] {
+  width: clamp(132px, 12vw, 188px);
+  min-height: clamp(78px, 7.4vw, 104px);
+  opacity: 0.98;
+  box-shadow: 0 16px 42px rgba(38, 49, 65, 0.14);
+}
+
+.map-card[data-layer="primary"] strong {
+  font-size: clamp(18px, 1.65vw, 25px);
+}
+
+.map-card[data-layer="archive"] {
+  width: clamp(104px, 9.4vw, 146px);
+  min-height: clamp(60px, 5.8vw, 82px);
+  opacity: 0.68;
+}
+
+.map-card[data-layer="archive"] strong {
+  font-size: clamp(15px, 1.15vw, 19px);
 }
 
 .tone-primary {
@@ -459,7 +515,7 @@ button {
   }
 
   .map-card.is-side {
-    animation-delay: calc((var(--x) + var(--y)) * 12ms);
+    animation-delay: calc(var(--stack-index) * 120ms);
   }
 }
 
@@ -484,13 +540,22 @@ button {
   }
 
   .map-card {
-    width: 128px;
+    width: 108px;
     min-height: 72px;
     padding: 12px;
   }
 
+  .map-card[data-layer="primary"] {
+    width: 124px;
+  }
+
+  .map-card[data-layer="archive"] {
+    width: 100px;
+    opacity: 0.48;
+  }
+
   .map-card strong {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .map-started .map-card.is-route {
@@ -530,8 +595,8 @@ button {
   }
 
   .map-card {
-    width: 116px;
-    min-height: 68px;
+    width: 98px;
+    min-height: 62px;
   }
 
   .map-card span {
@@ -539,7 +604,7 @@ button {
   }
 
   .map-card strong {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .guided-route {
