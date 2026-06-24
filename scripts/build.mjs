@@ -1,13 +1,19 @@
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { siteContent } from "../site/content.mjs";
+import { mapContent } from "../site/mapContent.mjs";
 import { renderPage } from "../site/render.mjs";
+import { renderMapPage } from "../site/renderMap.mjs";
 
 await rm("dist", { recursive: true, force: true });
 await mkdir("dist/artifacts", { recursive: true });
 
 await writeFile("dist/index.html", renderPage(siteContent), "utf8");
+await writeFile("dist/map.html", renderMapPage(mapContent), "utf8");
+await writeFile("dist/.nojekyll", "", "utf8");
 await cp("site/styles.css", "dist/styles.css");
 await cp("site/interactions.js", "dist/interactions.js");
+await cp("site/mapStyles.css", "dist/mapStyles.css");
+await cp("site/mapInteractions.js", "dist/mapInteractions.js");
 
 const assets = [
   ["public/artifacts/portfolio-page-1.png", "dist/artifacts/portfolio-page-1.png"],
@@ -27,3 +33,4 @@ if (!html.includes("AI 工具，有用也有温度")) {
 }
 
 console.log("Built dist/index.html");
+console.log("Built dist/map.html");

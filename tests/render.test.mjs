@@ -64,3 +64,56 @@ test("build does not require oversized private video assets", async () => {
   assert.doesNotMatch(buildSource, /ai-projects-full\.m4v/);
   assert.match(buildSource, /ai-projects-reel-preview\.m4v/);
 });
+
+test("repository includes a GitHub Pages deployment workflow", async () => {
+  const workflow = await readFile(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8");
+
+  assert.match(workflow, /name: Deploy Personal Website/);
+  assert.match(workflow, /npm test/);
+  assert.match(workflow, /npm run build/);
+  assert.match(workflow, /actions\/upload-pages-artifact@v4/);
+  assert.match(workflow, /actions\/deploy-pages@v4/);
+  assert.match(workflow, /path: dist/);
+});
+
+test("map page renders the approved inspiration-map entrance", async () => {
+  const { mapContent } = await import("../site/mapContent.mjs");
+  const { renderMapPage } = await import("../site/renderMap.mjs");
+  const html = renderMapPage(mapContent);
+
+  assert.match(html, /<html lang="zh-CN">/i);
+  assert.match(html, /开始整理我的探索路径/);
+  assert.match(html, /id="inspiration-map"/);
+  assert.match(html, /data-map-card="ai-product"/);
+  assert.match(html, /AI 产品与工具/);
+  assert.match(html, /AI 金融教育/);
+  assert.match(html, /工作流与 Agent/);
+  assert.match(html, /数据与可信度/);
+  assert.match(html, /动态作品影像/);
+  assert.match(html, /跨界方法/);
+  assert.match(html, /生活与价值观/);
+  assert.match(html, /ai-projects-reel-preview\.m4v/);
+  assert.match(html, /mapStyles\.css/);
+  assert.match(html, /mapInteractions\.js/);
+});
+
+test("build script emits the inspiration-map page and assets", async () => {
+  const buildSource = await readFile(new URL("../scripts/build.mjs", import.meta.url), "utf8");
+
+  assert.match(buildSource, /renderMapPage/);
+  assert.match(buildSource, /dist\/map\.html/);
+  assert.match(buildSource, /mapStyles\.css/);
+  assert.match(buildSource, /mapInteractions\.js/);
+});
+
+test("map interaction supports collection transition and reduced motion", async () => {
+  const script = await readFile(new URL("../site/mapInteractions.js", import.meta.url), "utf8");
+  const css = await readFile(new URL("../site/mapStyles.css", import.meta.url), "utf8");
+
+  assert.match(script, /map-started/);
+  assert.match(script, /aria-expanded/);
+  assert.match(script, /keydown/);
+  assert.match(css, /prefers-reduced-motion/);
+  assert.match(css, /transform/);
+  assert.match(css, /opacity/);
+});
