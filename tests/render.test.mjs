@@ -46,6 +46,11 @@ test("work section renders a visual evidence wall instead of text-only cards", (
   assert.match(html, /data-work-preview/);
   assert.match(html, /work-visual work-visual-video/);
   assert.match(html, /work-flow-preview/);
+  assert.match(html, /work-visual work-visual-trust/);
+  assert.match(html, /work-trust-preview/);
+  assert.match(html, /data-trust-signal/);
+  assert.match(html, /推荐频次/);
+  assert.match(html, /原帖溯源/);
   assert.match(html, /ai-projects-reel-preview\.m4v/);
   assert.doesNotMatch(html, /Conceptual workflow artifact/);
 });

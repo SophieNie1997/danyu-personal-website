@@ -94,10 +94,40 @@ export const siteContent = {
       image: "./artifacts/portfolio-page-3.png",
       imageAlt: "AI 投研案例材料页面截图",
       visual: {
-        type: "image",
-        src: "./artifacts/portfolio-page-3.png",
-        alt: "数据分析与项目说明材料截图",
-        caption: "用材料页承载分析过程，让推荐、来源和判断不只停留在口头描述。"
+        type: "trust",
+        caption: "把社交媒体推荐拆成地点、频次和原帖，让漂亮攻略变成可信判断的证据。",
+        signals: [
+          {
+            name: "海边咖啡馆",
+            note: "推荐频次 18",
+            source: "7 篇原帖"
+          },
+          {
+            name: "老街民宿",
+            note: "推荐频次 11",
+            source: "4 篇原帖"
+          },
+          {
+            name: "夜市小吃",
+            note: "推荐频次 24",
+            source: "9 篇原帖"
+          }
+        ],
+        checks: [
+          {
+            label: "地点合并",
+            value: "同义名清洗"
+          },
+          {
+            label: "推荐频次",
+            value: "高频优先"
+          },
+          {
+            label: "原帖溯源",
+            value: "回到来源"
+          }
+        ],
+        verdict: "先看高频推荐，再检查来源和场景。"
       },
       accent: "rose"
     },

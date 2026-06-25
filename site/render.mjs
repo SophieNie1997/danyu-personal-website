@@ -55,6 +55,48 @@ const renderWorkVisual = (item, index) => {
     `;
   }
 
+  if (visual.type === "trust") {
+    return `
+      <figure class="work-visual work-visual-trust" data-work-preview>
+        <div class="work-trust-preview" aria-label="${escapeHtml(item.title)}可信度分析动画">
+          <div class="trust-note-stream" aria-label="攻略笔记输入">
+            ${visual.signals
+              .map(
+                (signal, signalIndex) => `
+                  <article class="trust-note" data-trust-signal style="--signal-index: ${signalIndex};">
+                    <span>小红书笔记</span>
+                    <strong>${escapeHtml(signal.name)}</strong>
+                    <small>${escapeHtml(signal.note)} / ${escapeHtml(signal.source)}</small>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+          <div class="trust-scan-column" aria-hidden="true">
+            <span class="trust-scan-line"></span>
+            <span class="trust-source-dot trust-source-dot-1"></span>
+            <span class="trust-source-dot trust-source-dot-2"></span>
+            <span class="trust-source-dot trust-source-dot-3"></span>
+          </div>
+          <div class="trust-verdict-panel" aria-label="可信度判断输出">
+            ${visual.checks
+              .map(
+                (check, checkIndex) => `
+                  <div class="trust-check" style="--check-index: ${checkIndex};">
+                    <span>${escapeHtml(check.label)}</span>
+                    <strong>${escapeHtml(check.value)}</strong>
+                  </div>
+                `
+              )
+              .join("")}
+            <p>${escapeHtml(visual.verdict)}</p>
+          </div>
+        </div>
+        <figcaption>${escapeHtml(visual.caption)}</figcaption>
+      </figure>
+    `;
+  }
+
   return `
     <figure class="work-visual work-visual-image" data-work-preview>
       <img src="${escapeHtml(visual.src)}" alt="${escapeHtml(visual.alt)}" loading="${index === 0 ? "eager" : "lazy"}" />

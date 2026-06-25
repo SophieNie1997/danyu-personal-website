@@ -34,11 +34,20 @@ test("selected work items include visual evidence metadata", () => {
 
   assert.deepEqual(
     Array.from(visualTypes).sort(),
-    ["flow", "image", "video"]
+    ["flow", "image", "trust", "video"]
   );
 
   for (const item of siteContent.work) {
     assert.ok(item.visual, `${item.title} needs a visual evidence block`);
     assert.ok(item.visual.caption.length > 0);
   }
+});
+
+test("travel credibility project carries trust-analysis animation data", () => {
+  const travelProject = siteContent.work.find((item) => item.title.includes("旅行攻略可信度"));
+
+  assert.equal(travelProject.visual.type, "trust");
+  assert.ok(travelProject.visual.signals.length >= 3);
+  assert.ok(travelProject.visual.checks.length >= 3);
+  assert.match(travelProject.visual.caption, /可信/);
 });
