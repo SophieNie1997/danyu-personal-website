@@ -5,7 +5,7 @@ import { siteContent } from "../site/content.mjs";
 test("site content carries the approved evidence-driven living museum structure", () => {
   assert.equal(siteContent.meta.locale, "zh-CN");
   assert.match(siteContent.hero.headline, /AI 工具/);
-  assert.equal(siteContent.work.length, 4);
+  assert.equal(siteContent.work.length, 5);
   assert.equal(siteContent.thinking.length, 5);
   assert.equal(siteContent.timeline.length, 6);
   assert.equal(siteContent.values.length, 5);
@@ -34,7 +34,7 @@ test("selected work items include visual evidence metadata", () => {
 
   assert.deepEqual(
     Array.from(visualTypes).sort(),
-    ["flow", "image", "trust", "video"]
+    ["agent", "flow", "image", "trust", "video"]
   );
 
   for (const item of siteContent.work) {
@@ -50,4 +50,15 @@ test("travel credibility project carries trust-analysis animation data", () => {
   assert.ok(travelProject.visual.signals.length >= 3);
   assert.ok(travelProject.visual.checks.length >= 3);
   assert.match(travelProject.visual.caption, /可信/);
+});
+
+test("research report agent is represented as a work evidence project", () => {
+  const agentProject = siteContent.work.find((item) => item.title.includes("研报分析"));
+
+  assert.ok(agentProject);
+  assert.equal(agentProject.visual.type, "agent");
+  assert.ok(agentProject.visual.stages.length >= 4);
+  assert.ok(agentProject.visual.outputs.length >= 3);
+  assert.match(agentProject.problem, /研报|公告/);
+  assert.match(agentProject.visual.caption, /研报/);
 });

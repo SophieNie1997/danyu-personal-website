@@ -48,6 +48,12 @@ test("work section renders a visual evidence wall instead of text-only cards", (
   assert.match(html, /work-flow-preview/);
   assert.match(html, /work-visual work-visual-trust/);
   assert.match(html, /work-trust-preview/);
+  assert.match(html, /work-visual work-visual-agent/);
+  assert.match(html, /work-agent-preview/);
+  assert.match(html, /data-agent-stage/);
+  assert.match(html, /研报输入/);
+  assert.match(html, /指标提取/);
+  assert.match(html, /风险提示/);
   assert.match(html, /data-trust-signal/);
   assert.match(html, /推荐频次/);
   assert.match(html, /原帖溯源/);

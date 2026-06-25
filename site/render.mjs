@@ -55,6 +55,57 @@ const renderWorkVisual = (item, index) => {
     `;
   }
 
+  if (visual.type === "agent") {
+    return `
+      <figure class="work-visual work-visual-agent" data-work-preview>
+        <div class="work-agent-preview" aria-label="${escapeHtml(item.title)}工作流动画">
+          <div class="agent-document-stack" aria-label="研报材料输入">
+            <article class="agent-document agent-document-1">
+              <span>Research Report</span>
+              <strong>行业研报</strong>
+              <small>收入 / 利润率 / 增速</small>
+            </article>
+            <article class="agent-document agent-document-2">
+              <span>Company Filing</span>
+              <strong>公告材料</strong>
+              <small>业务变化 / 经营假设</small>
+            </article>
+            <article class="agent-document agent-document-3">
+              <span>Market Notes</span>
+              <strong>投研笔记</strong>
+              <small>问题清单 / 追问方向</small>
+            </article>
+          </div>
+          <div class="agent-pipeline" aria-label="Agent 分析步骤">
+            ${visual.stages
+              .map(
+                (stage, stageIndex) => `
+                  <div class="agent-stage" data-agent-stage style="--agent-stage-index: ${stageIndex};">
+                    <span>${String(stageIndex + 1).padStart(2, "0")}</span>
+                    <div>
+                      <strong>${escapeHtml(stage.title)}</strong>
+                      <small>${escapeHtml(stage.text)}</small>
+                    </div>
+                  </div>
+                `
+              )
+              .join("")}
+          </div>
+          <div class="agent-output-panel" aria-label="分析输出">
+            <span class="agent-output-kicker">输出</span>
+            <strong>投研结论卡片</strong>
+            <div>
+              ${visual.outputs
+                .map((output, outputIndex) => `<span class="agent-output" style="--agent-output-index: ${outputIndex};">${escapeHtml(output)}</span>`)
+                .join("")}
+            </div>
+          </div>
+        </div>
+        <figcaption>${escapeHtml(visual.caption)}</figcaption>
+      </figure>
+    `;
+  }
+
   if (visual.type === "trust") {
     return `
       <figure class="work-visual work-visual-trust" data-work-preview>
@@ -151,7 +202,7 @@ const renderWork = (content) => `
   <section class="section-shell work-section" id="work" aria-labelledby="work-title">
     <div class="section-heading">
       <h2 id="work-title">作品作为证据</h2>
-      <p>四个切面，分别展示 AI 教育、工作流设计、旅行数据和以学生为中心的产品思考。</p>
+      <p>五个切面，分别展示 AI 金融教育、投研 Agent、工作流设计、旅行数据和以学生为中心的产品思考。</p>
     </div>
     <div class="work-grid work-proof-wall">
       ${content.work
