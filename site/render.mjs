@@ -6,22 +6,60 @@ const escapeHtml = (value) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 
-const renderImage = (item, index) => {
-  if (item.image) {
+const renderWorkVisual = (item, index) => {
+  const visual = item.visual;
+
+  if (!visual) return "";
+
+  if (visual.type === "video") {
     return `
-      <figure class="work-visual work-visual-image">
-        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.imageAlt)}" loading="${index === 0 ? "eager" : "lazy"}" />
+      <figure class="work-visual work-visual-video" data-work-preview>
+        <div class="work-phone-frame">
+          <video
+            controls
+            muted
+            playsinline
+            preload="metadata"
+            poster="${escapeHtml(visual.poster)}"
+            aria-label="${escapeHtml(visual.label)}"
+          >
+            <source src="${escapeHtml(visual.src)}" type="video/mp4" />
+          </video>
+        </div>
+        <figcaption>${escapeHtml(visual.caption)}</figcaption>
+      </figure>
+    `;
+  }
+
+  if (visual.type === "flow") {
+    return `
+      <figure class="work-visual work-visual-flow" data-work-preview>
+        <div class="work-flow-preview" aria-label="${escapeHtml(item.title)}项目流程">
+          <span class="work-flow-thread" aria-hidden="true"></span>
+          ${visual.steps
+            .map(
+              (step, stepIndex) => `
+                <div class="work-flow-step" style="--step-index: ${stepIndex};">
+                  <span>${String(stepIndex + 1).padStart(2, "0")}</span>
+                  <div>
+                    <strong>${escapeHtml(step.title)}</strong>
+                    <small>${escapeHtml(step.text)}</small>
+                  </div>
+                </div>
+              `
+            )
+            .join("")}
+        </div>
+        <figcaption>${escapeHtml(visual.caption)}</figcaption>
       </figure>
     `;
   }
 
   return `
-    <div class="work-visual work-visual-concept" aria-label="Conceptual workflow artifact">
-      <span></span>
-      <span></span>
-      <span></span>
-      <strong>工作流地图</strong>
-    </div>
+    <figure class="work-visual work-visual-image" data-work-preview>
+      <img src="${escapeHtml(visual.src)}" alt="${escapeHtml(visual.alt)}" loading="${index === 0 ? "eager" : "lazy"}" />
+      <figcaption>${escapeHtml(visual.caption)}</figcaption>
+    </figure>
   `;
 };
 
@@ -73,12 +111,12 @@ const renderWork = (content) => `
       <h2 id="work-title">作品作为证据</h2>
       <p>四个切面，分别展示 AI 教育、工作流设计、旅行数据和以学生为中心的产品思考。</p>
     </div>
-    <div class="work-grid">
+    <div class="work-grid work-proof-wall">
       ${content.work
         .map(
           (item, index) => `
-            <article class="work-card work-card-${index + 1} accent-${escapeHtml(item.accent)}">
-              ${renderImage(item, index)}
+            <article class="work-card work-card-${index + 1} accent-${escapeHtml(item.accent)}" style="--work-index: ${index};">
+              ${renderWorkVisual(item, index)}
               <div class="work-card-copy">
                 <p class="card-label">${escapeHtml(item.category)}</p>
                 <h3>${escapeHtml(item.title)}</h3>

@@ -43,6 +43,12 @@ export const siteContent = {
         "学生围绕股票模拟、AI 金融分析和竞赛准备产出真实项目，课程从知识讲解延展到动手实践。",
       image: "./artifacts/portfolio-page-1.png",
       imageAlt: "AI 投研作品集与面试补充材料封面",
+      visual: {
+        type: "image",
+        src: "./artifacts/portfolio-page-1.png",
+        alt: "AI 金融课程与学生项目材料页面截图",
+        caption: "真实作品集材料，展示课程项目如何被组织成可读、可交付的证据。"
+      },
       accent: "blue"
     },
     {
@@ -56,6 +62,24 @@ export const siteContent = {
         "流程将原始转写内容拆分为学生维度的信息、总结、评分和家长可读文本，让 AI 自动化嵌入真实教育场景。",
       image: "",
       imageAlt: "",
+      visual: {
+        type: "flow",
+        caption: "没有伪造截图，用动态流程呈现这个项目的真实工作逻辑。",
+        steps: [
+          {
+            title: "课堂转写",
+            text: "把录音和原始文本收进同一条处理链。"
+          },
+          {
+            title: "学生拆分",
+            text: "按学生维度抽取表现、细节和上下文。"
+          },
+          {
+            title: "点评生成",
+            text: "输出老师可改、家长可读的反馈文本。"
+          }
+        ]
+      },
       accent: "green"
     },
     {
@@ -69,6 +93,12 @@ export const siteContent = {
         "项目把内容挖掘、数据清洗、前端展示和用户信任连接在一起，不只是生成攻略，而是帮助判断攻略是否可信。",
       image: "./artifacts/portfolio-page-3.png",
       imageAlt: "AI 投研案例材料页面截图",
+      visual: {
+        type: "image",
+        src: "./artifacts/portfolio-page-3.png",
+        alt: "数据分析与项目说明材料截图",
+        caption: "用材料页承载分析过程，让推荐、来源和判断不只停留在口头描述。"
+      },
       accent: "rose"
     },
     {
@@ -82,6 +112,13 @@ export const siteContent = {
         "这个方向强调学生好奇心、项目可行性和成人信任之间的平衡，而不是生成一批泛泛的项目标题。",
       image: "./artifacts/resume-page-1.png",
       imageAlt: "聂丹雨 AI 产品与金融方向简历截图",
+      visual: {
+        type: "video",
+        src: "./artifacts/ai-projects-reel-preview.m4v",
+        poster: "./artifacts/ai-projects-poster.png",
+        label: "AI Projects Reel 中的学生兴趣和创意工具片段",
+        caption: "用动态项目影像展示兴趣、视觉包装和工具思路如何被做出来。"
+      },
       accent: "sage"
     }
   ],

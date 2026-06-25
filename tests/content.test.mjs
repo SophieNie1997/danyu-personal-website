@@ -28,3 +28,17 @@ test("selected work items include problem, role, and evidence fields", () => {
     assert.ok(item.evidence.length > 0);
   }
 });
+
+test("selected work items include visual evidence metadata", () => {
+  const visualTypes = new Set(siteContent.work.map((item) => item.visual?.type));
+
+  assert.deepEqual(
+    Array.from(visualTypes).sort(),
+    ["flow", "image", "video"]
+  );
+
+  for (const item of siteContent.work) {
+    assert.ok(item.visual, `${item.title} needs a visual evidence block`);
+    assert.ok(item.visual.caption.length > 0);
+  }
+});

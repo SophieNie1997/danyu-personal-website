@@ -39,6 +39,17 @@ test("rendered page references stylesheet, script, and proof artifacts", () => {
   assert.match(html, /resume-page-1\.png/);
 });
 
+test("work section renders a visual evidence wall instead of text-only cards", () => {
+  const html = renderPage(siteContent);
+
+  assert.match(html, /work-proof-wall/);
+  assert.match(html, /data-work-preview/);
+  assert.match(html, /work-visual work-visual-video/);
+  assert.match(html, /work-flow-preview/);
+  assert.match(html, /ai-projects-reel-preview\.m4v/);
+  assert.doesNotMatch(html, /Conceptual workflow artifact/);
+});
+
 test("rendered page includes the AI projects reel as lightweight dynamic evidence", () => {
   const html = renderPage(siteContent);
 
